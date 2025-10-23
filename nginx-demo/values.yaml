@@ -23,3 +23,7 @@ ingress:
         - path: /
           pathType: ImplementationSpecific
   tls: []
+
+httpRoute:
+  enabled: false
+
