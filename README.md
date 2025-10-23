@@ -1,47 +1,88 @@
 # rancher
 
-Port using till now
+Port using till now for checking
 
 [root@ol9-admin-01 devops]# sudo ss -tuln
-Netid               State                Recv-Q               Send-Q                                                  Local Address:Port                              Peer Address:Port
-udp                 UNCONN               0                    0                                                             0.0.0.0:111                                    0.0.0.0:*
-udp                 UNCONN               0                    0                                                           127.0.0.1:323                                    0.0.0.0:*
-udp                 UNCONN               0                    0                                                                [::]:111                                       [::]:*
-udp                 UNCONN               0                    0                                                               [::1]:323                                       [::]:*
-udp                 UNCONN               0                    0                                  [fe80::17e9:ffe6:702f:f5bf]%ens224:546                                       [::]:*
-tcp                 LISTEN               0                    4096                                                        127.0.0.1:8001                                   0.0.0.0:*
-tcp                 LISTEN               0                    4096                                                          0.0.0.0:111                                    0.0.0.0:*
-tcp                 LISTEN               0                    128                                                           0.0.0.0:22                                     0.0.0.0:*
-tcp                 LISTEN               0                    2000                                                          0.0.0.0:443                                    0.0.0.0:*
-tcp                 LISTEN               0                    4096                                                          0.0.0.0:8888                                   0.0.0.0:*
-tcp                 LISTEN               0                    4096                                                          0.0.0.0:50000                                  0.0.0.0:*
-tcp                 LISTEN               0                    4096                                                             [::]:111                                       [::]:*
-tcp                 LISTEN               0                    128                                                              [::]:22                                        [::]:*
-tcp                 LISTEN               0                    4096                                                             [::]:8888                                      [::]:*
-tcp                 LISTEN               0                    4096                                                             [::]:50000                                     [::]:*
-tcp                 LISTEN               0                    4096                                                                *:9100                                         *:*
-[root@ol9-admin-01 devops]#
-
 
 [root@ol9-admin-01 devops]# sudo netstat -tuln
-Active Internet connections (only servers)
-Proto Recv-Q Send-Q Local Address           Foreign Address         State
-tcp        0      0 127.0.0.1:8001          0.0.0.0:*               LISTEN
-tcp        0      0 0.0.0.0:111             0.0.0.0:*               LISTEN
-tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN
-tcp        0      0 0.0.0.0:443             0.0.0.0:*               LISTEN
-tcp        0      0 0.0.0.0:8888            0.0.0.0:*               LISTEN
-tcp        0      0 0.0.0.0:50000           0.0.0.0:*               LISTEN
-tcp6       0      0 :::111                  :::*                    LISTEN
-tcp6       0      0 :::22                   :::*                    LISTEN
-tcp6       0      0 :::8888                 :::*                    LISTEN
-tcp6       0      0 :::50000                :::*                    LISTEN
-tcp6       0      0 :::9100                 :::*                    LISTEN
-udp        0      0 0.0.0.0:111             0.0.0.0:*
-udp        0      0 127.0.0.1:323           0.0.0.0:*
-udp6       0      0 :::111                  :::*
-udp6       0      0 ::1:323                 :::*
-udp6       0      0 fe80::17e9:ffe6:702:546 :::*
-[root@ol9-admin-01 devops]#
+# First day lab:
+helm install nginx-demo ./nginx-demo --namespace prd-web --create-namespace
 
+kubectl get pods -n prd-web
+kubectl get svc -n prd-web
+
+# Now removed deployment from rancher --> works 
+# But we have delete svc manually
+
+# For redeploy with helm
+
+[root@ol9-admin-01 rancher]# helm uninstall nginx-demo -n prd-web
+release "nginx-demo" uninstalled
+[root@ol9-admin-01 rancher]#
+
+helm install nginx-demo ./nginx-demo --namespace prd-web --create-namespace
+
+# You might notice svc set different port even though you mentioned 30080
+# for the quick solution patch
+
+kubectl patch svc nginx-demo -n prd-web -p '{"spec": {"ports": [{"port": 80, "nodePort": 30080, "protocol": "TCP", "targetPort": 80}]}}'
+
+# Next project:
+
++-------------------+          +-----------------------+
+|   Developer       |          |     GitHub Actions     |
+|  (Push Code)      | -------->|   CI: Build, Test,    |
++-------------------+          |   Scan, Push Image    |
+                               +-----------+-----------+
+                                           |
+                                           v
+                             +---------------------------+
+                             |     Container Registry     |
+                             |  (Docker Hub, GHCR, etc.)  |
+                             +------------+--------------+
+                                          |
+                                          v
+                             +---------------------------+
+                             |     GitOps Repo           |
+                             |  (Manifests / Helm charts)|
+                             +------------+--------------+
+                                          |
+                        +-----------------+-----------------+
+                        |                                   |
+                        v                                   v
++-----------------------------+              +----------------------------+
+|  GitHub Actions CD Workflow |              |         ArgoCD              |
+| (Update manifests, PRs)     |-------------->| Watches GitOps repo        |
++-----------------------------+              | Syncs to Kubernetes cluster|
+                                             +------------+---------------+
+                                                          |
+                                                          v
+                                  +----------------------------------+
+                                  | Rancher Managed Kubernetes       |
+                                  | Cluster with Projects:           |
+                                  | - dev                           |
+                                  | - staging                       |
+                                  | - prod                          |
+                                  +---------------+------------------+
+                                                  |
+                                  +---------------+-------------------+
+                                  | Ingress Controller (Nginx/Traefik)|
+                                  | cert-manager for TLS              |
+                                  +---------------------------------+
+                                                  |
+                                  +---------------+-------------------+
+                                  |   Monitoring & Alerts             |
+                                  | Prometheus + Grafana + Alerting  |
+                                  +---------------------------------+
+
+# Environment Promotion Flow (Simplified):
+Dev environment (Rancher Project)
+          |
+          | -- QA, manual tests, automated tests
+          v
+Staging environment (Rancher Project)
+          |
+          | -- Final validation
+          v
+Production environment (Rancher Project)
 
