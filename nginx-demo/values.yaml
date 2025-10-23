@@ -27,3 +27,5 @@ ingress:
 httpRoute:
   enabled: false
 
+hpa:
+  enabled: false
