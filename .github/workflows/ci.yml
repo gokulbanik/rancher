@@ -15,7 +15,7 @@ env:
 jobs:
   build:
     name: Build Docker Image
-    runs-on: ubuntu-latest
+    runs-on: self-hosted   # <- Use your self-hosted runner
 
     steps:
       - name: Checkout Code
@@ -25,15 +25,12 @@ jobs:
         uses: docker/setup-buildx-action@v2
 
       - name: Log in to Nexus Docker Registry
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.NEXUS_USERNAME }}
-          password: ${{ secrets.NEXUS_PASSWORD }}
-          registry: ${{ env.REGISTRY }}
+        run: |
+          echo "${{ secrets.NEXUS_PASSWORD }}" | docker login ${{ env.REGISTRY }} -u "${{ secrets.NEXUS_USERNAME }}" --password-stdin
 
       - name: Build Docker Image
         run: |
-          docker build -t ${{ env.REGISTRY }}/simple-static-web:1.0.0 ./simple-static-web
+          docker build -t ${{ env.REGISTRY }}/simple-static-web:1.0.0 ./git-action-project/simple-static-web
 
       - name: Push Docker Image to Nexus
         run: |
@@ -41,7 +38,7 @@ jobs:
 
   scan:
     name: Scan Docker Image
-    runs-on: ubuntu-latest
+    runs-on: self-hosted   # <- Use self-hosted runner
     needs: build
 
     steps:
@@ -58,7 +55,7 @@ jobs:
 
   html-lint:
     name: Lint HTML files
-    runs-on: ubuntu-latest
+    runs-on: self-hosted   # <- Use self-hosted runner
     needs: build
 
     steps:
@@ -74,4 +71,4 @@ jobs:
         run: gem install html-proofer
 
       - name: Run HTMLProofer
-        run: htmlproofer ./simple-static-web --assume-extension
+        run: htmlproofer ./git-action-project/simple-static-web --assume-extension

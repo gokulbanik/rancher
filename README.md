@@ -96,3 +96,13 @@ docker tag simple-static-web:latest 10.10.10.116:8083/simple-static-web:1.0.0
 # push to my private repo
 docker push 10.10.10.116:8083/simple-static-web:1.0.0
 
+# check gitaction runner
+sudo systemctl status actions.runner.gokulbanik-rancher.ol9-admin-01.service
+
+# gitaction runner tag or lebel
+Enter the name of runner: [press Enter for ol9-admin-01]
+
+This runner will have the following labels: 'self-hosted', 'Linux', 'X64'
+Enter any additional labels (ex. label-1,label-2): [press Enter to skip]
+
+√ Runner successfully added
