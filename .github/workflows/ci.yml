@@ -55,21 +55,23 @@ jobs:
 
   html-lint:
     name: Lint HTML files
-    runs-on: self-hosted   # <- Use self-hosted runner
+    runs-on: self-hosted
     needs: build
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Set up Ruby (required by HTMLProofer)
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 3.2
-          check-ruby-version: true
+      - name: Ensure Ruby is in PATH
+        run: |
+          echo "Adding rbenv to PATH"
+          export PATH="$HOME/.rbenv/shims:$HOME/.rbenv/bin:$PATH"
+          ruby -v
+          gem -v
 
       - name: Install HTMLProofer
         run: gem install html-proofer
 
       - name: Run HTMLProofer
         run: htmlproofer ./simple-static-web --assume-extension
+
