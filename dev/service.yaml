@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: simple-static-web-dev
+  labels:
+    app: simple-static-web-dev
+spec:
+  selector:
+    app: simple-static-web-dev
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+      nodePort: 30080
+

@@ -1,0 +1,74 @@
+name: Build, Scan & Lint
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+env:
+  IMAGE_NAME: simple-static-web:latest
+  REGISTRY: 10.10.10.116:8083
+
+jobs:
+  build:
+    name: Build Docker Image
+    runs-on: self-hosted   # <- Use your self-hosted runner
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to Nexus Docker Registry
+        run: |
+          echo "${{ secrets.NEXUS_PASSWORD }}" | docker login ${{ env.REGISTRY }} -u "${{ secrets.NEXUS_USERNAME }}" --password-stdin
+
+      - name: Build Docker Image
+        run: |
+          docker build -t ${{ env.REGISTRY }}/simple-static-web:1.0.1 ./simple-static-web
+
+      - name: Push Docker Image to Nexus
+        run: |
+          docker push ${{ env.REGISTRY }}/simple-static-web:1.0.1
+
+  scan:
+    name: Scan Docker Image
+    runs-on: self-hosted   # <- Use self-hosted runner
+    needs: build
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Scan Docker image with Trivy
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: ${{ env.REGISTRY }}/simple-static-web:1.0.1
+          format: table
+          exit-code: 1
+          vuln-type: os,library
+
+  html-lint:
+    name: Lint HTML files
+    runs-on: self-hosted
+    if: false   # <- This disables the job entirely
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2
+
+      - name: Install HTMLProofer
+        run: gem install html-proofer
+
+      - name: Run HTMLProofer
+        run: htmlproofer ./simple-static-web --assume-extension

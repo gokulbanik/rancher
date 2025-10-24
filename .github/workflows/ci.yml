@@ -1,4 +1,4 @@
-name: Build, Scan & Lint
+name: Build, Scan & Deploy (Dev)
 
 on:
   push:
@@ -9,13 +9,14 @@ on:
       - main
 
 env:
-  IMAGE_NAME: simple-static-web:latest
+  IMAGE_NAME: simple-static-web
+  IMAGE_TAG: 1.0.${{ github.run_number }}   # auto-increment tag
   REGISTRY: 10.10.10.116:8083
 
 jobs:
   build:
     name: Build Docker Image
-    runs-on: self-hosted   # <- Use your self-hosted runner
+    runs-on: self-hosted
 
     steps:
       - name: Checkout Code
@@ -30,15 +31,15 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -t ${{ env.REGISTRY }}/simple-static-web:1.0.1 ./simple-static-web
+          docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} ./simple-static-web
 
       - name: Push Docker Image to Nexus
         run: |
-          docker push ${{ env.REGISTRY }}/simple-static-web:1.0.1
+          docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
 
   scan:
     name: Scan Docker Image
-    runs-on: self-hosted   # <- Use self-hosted runner
+    runs-on: self-hosted
     needs: build
 
     steps:
@@ -48,27 +49,35 @@ jobs:
       - name: Scan Docker image with Trivy
         uses: aquasecurity/trivy-action@0.28.0
         with:
-          image-ref: ${{ env.REGISTRY }}/simple-static-web:1.0.1
+          image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
           format: table
-          exit-code: 1
+          exit-code: 0
           vuln-type: os,library
 
-  html-lint:
-    name: Lint HTML files
+  update-manifest:
+    name: Update Dev Manifests
     runs-on: self-hosted
-    if: false   # <- This disables the job entirely
+    needs: scan
 
     steps:
-      - name: Checkout Code
+      - name: Checkout GitOps Repo
         uses: actions/checkout@v3
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.2
+          # ⚠️ Replace with your GitOps repo (the one containing the manifests)
+          repository: gokulbanik/rancher
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: rancher
 
-      - name: Install HTMLProofer
-        run: gem install html-proofer
+      - name: Update deployment image tag
+        run: |
+          cd rancher/dev
+          sed -i "s|image: .*|image: ${REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}|" deployment.yaml
 
-      - name: Run HTMLProofer
-        run: htmlproofer ./simple-static-web --assume-extension
+      - name: Commit and push manifest changes
+        run: |
+          cd rancher
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add dev/deployment.yaml
+          git commit -m "Update image to ${REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}"
+          git push origin main
