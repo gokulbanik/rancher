@@ -66,6 +66,7 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.2
+          check-ruby-version: true
 
       - name: Install HTMLProofer
         run: gem install html-proofer
