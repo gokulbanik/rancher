@@ -1,54 +1,77 @@
-name: CI - Build, Test, Scan, Push
+name: Build, Scan & Lint
 
 on:
   push:
     branches:
       - main
   pull_request:
+    branches:
+      - main
+
+env:
+  IMAGE_NAME: simple-static-web:latest
+  REGISTRY: 10.10.10.116:8083
 
 jobs:
-  build-and-scan:
+  build:
+    name: Build Docker Image
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout code
-      - name: Checkout code
+      - name: Checkout Code
         uses: actions/checkout@v3
 
-      # Step 2: Lint HTML (basic test)
-      - name: Lint HTML
-        uses: tj-actions/htmlproofer@v0.4.0
-        with:
-          folder: ./simple-static-web
-          check_external_hash: false
-          check_img_http: false
-
-      # Step 3: Set up Docker Buildx
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      # Step 4: Log in to Nexus
-      - name: Log in to Nexus Docker registry
+      - name: Log in to Nexus Docker Registry
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.NEXUS_USERNAME }}
           password: ${{ secrets.NEXUS_PASSWORD }}
-          registry: 10.10.10.116:8083
+          registry: ${{ env.REGISTRY }}
 
-      # Step 5: Build Docker image
-      - name: Build Docker image
+      - name: Build Docker Image
         run: |
-          docker build -t 10.10.10.116:8083/simple-static-web:latest ./simple-static-web
+          docker build -t ${{ env.REGISTRY }}/simple-static-web:1.0.0 ./simple-static-web
 
-      # Step 6: Scan Docker image with Trivy
+      - name: Push Docker Image to Nexus
+        run: |
+          docker push ${{ env.REGISTRY }}/simple-static-web:1.0.0
+
+  scan:
+    name: Scan Docker Image
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
       - name: Scan Docker image with Trivy
-        uses: aquasecurity/trivy-action@v1
+        uses: aquasecurity/trivy-action@v0.13.2
         with:
-          image-ref: 10.10.10.116:8083/simple-static-web:latest
+          image-ref: ${{ env.REGISTRY }}/simple-static-web:1.0.0
           format: table
-          exit-code: 1  # fail job if vulnerabilities found
+          exit-code: 1
+          vuln-type: os,library
 
-      # Step 7: Push Docker image
-      - name: Push Docker image
-        run: |
-          docker push 10.10.10.116:8083/simple-static-web:latest
+  html-lint:
+    name: Lint HTML files
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Ruby (required by HTMLProofer)
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2
+
+      - name: Install HTMLProofer
+        run: gem install html-proofer
+
+      - name: Run HTMLProofer
+        run: htmlproofer ./simple-static-web --assume-extension
