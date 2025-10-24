@@ -30,7 +30,7 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -t ${{ env.REGISTRY }}/simple-static-web:1.0.0 ./git-action-project/simple-static-web
+          docker build -t ${{ env.REGISTRY }}/simple-static-web:1.0.0 ./simple-static-web
 
       - name: Push Docker Image to Nexus
         run: |
