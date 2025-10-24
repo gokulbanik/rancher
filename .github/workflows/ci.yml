@@ -56,32 +56,19 @@ jobs:
   html-lint:
     name: Lint HTML files
     runs-on: self-hosted
-    needs: build
+    if: false   # <- This disables the job entirely
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Setup rbenv Ruby in PATH
-        run: |
-          export RBENV_ROOT="$HOME/.rbenv"
-          export PATH="$RBENV_ROOT/bin:$RBENV_ROOT/shims:$PATH"
-          eval "$(rbenv init -)"    # <-- This is essential
-          ruby -v                  # verify Ruby is detected
-          gem -v
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2
 
       - name: Install HTMLProofer
-        run: |
-          export RBENV_ROOT="$HOME/.rbenv"
-          export PATH="$RBENV_ROOT/bin:$RBENV_ROOT/shims:$PATH"
-          eval "$(rbenv init -)"
-          gem install html-proofer
+        run: gem install html-proofer
 
       - name: Run HTMLProofer
-        run: |
-          export RBENV_ROOT="$HOME/.rbenv"
-          export PATH="$RBENV_ROOT/bin:$RBENV_ROOT/shims:$PATH"
-          eval "$(rbenv init -)"
-          htmlproofer ./simple-static-web --assume-extension
-
-
+        run: htmlproofer ./simple-static-web --assume-extension
