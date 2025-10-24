@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: simple-static-web-dev
-          image: 10.10.10.116:8083/simple-static-web:1.0.23
+          image: 10.10.10.116:8083/simple-static-web:1.0.24
           ports:
             - containerPort: 80
           resources:
