@@ -86,6 +86,9 @@ Staging environment (Rancher Project)
           v
 Production environment (Rancher Project)
 
+# Build image
+docker build -t simple-static-web:1.0.1 .
+
 # Docker login from admin server
 docker login 10.10.10.116:8083
 

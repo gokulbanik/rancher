@@ -30,11 +30,11 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -t ${{ env.REGISTRY }}/simple-static-web:1.0.0 ./simple-static-web
+          docker build -t ${{ env.REGISTRY }}/simple-static-web:1.0.1 ./simple-static-web
 
       - name: Push Docker Image to Nexus
         run: |
-          docker push ${{ env.REGISTRY }}/simple-static-web:1.0.0
+          docker push ${{ env.REGISTRY }}/simple-static-web:1.0.1
 
   scan:
     name: Scan Docker Image
@@ -48,7 +48,7 @@ jobs:
       - name: Scan Docker image with Trivy
         uses: aquasecurity/trivy-action@0.28.0
         with:
-          image-ref: ${{ env.REGISTRY }}/simple-static-web:1.0.0
+          image-ref: ${{ env.REGISTRY }}/simple-static-web:1.0.1
           format: table
           exit-code: 1
           vuln-type: os,library
