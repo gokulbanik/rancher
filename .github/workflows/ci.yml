@@ -65,7 +65,7 @@ jobs:
         with:
           # ⚠️ Replace with your GitOps repo (the one containing the manifests)
           repository: gokulbanik/rancher
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.RANCHER_REPO_TOKEN }}
           path: rancher
 
       - name: Update deployment image tag
