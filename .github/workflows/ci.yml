@@ -62,16 +62,26 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Ensure Ruby is in PATH
+      - name: Setup rbenv Ruby in PATH
         run: |
-          echo "Adding rbenv to PATH"
-          export PATH="$HOME/.rbenv/shims:$HOME/.rbenv/bin:$PATH"
-          ruby -v
+          export RBENV_ROOT="$HOME/.rbenv"
+          export PATH="$RBENV_ROOT/bin:$RBENV_ROOT/shims:$PATH"
+          eval "$(rbenv init -)"    # <-- This is essential
+          ruby -v                  # verify Ruby is detected
           gem -v
 
       - name: Install HTMLProofer
-        run: gem install html-proofer
+        run: |
+          export RBENV_ROOT="$HOME/.rbenv"
+          export PATH="$RBENV_ROOT/bin:$RBENV_ROOT/shims:$PATH"
+          eval "$(rbenv init -)"
+          gem install html-proofer
 
       - name: Run HTMLProofer
-        run: htmlproofer ./simple-static-web --assume-extension
+        run: |
+          export RBENV_ROOT="$HOME/.rbenv"
+          export PATH="$RBENV_ROOT/bin:$RBENV_ROOT/shims:$PATH"
+          eval "$(rbenv init -)"
+          htmlproofer ./simple-static-web --assume-extension
+
 
