@@ -1,0 +1,54 @@
+name: CI - Build, Test, Scan, Push
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build-and-scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Lint HTML (basic test)
+      - name: Lint HTML
+        uses: tj-actions/htmlproofer@v0.4.0
+        with:
+          folder: ./simple-static-web
+          check_external_hash: false
+          check_img_http: false
+
+      # Step 3: Set up Docker Buildx
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # Step 4: Log in to Nexus
+      - name: Log in to Nexus Docker registry
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.NEXUS_USERNAME }}
+          password: ${{ secrets.NEXUS_PASSWORD }}
+          registry: 10.10.10.116:8083
+
+      # Step 5: Build Docker image
+      - name: Build Docker image
+        run: |
+          docker build -t 10.10.10.116:8083/simple-static-web:latest ./simple-static-web
+
+      # Step 6: Scan Docker image with Trivy
+      - name: Scan Docker image with Trivy
+        uses: aquasecurity/trivy-action@v1
+        with:
+          image-ref: 10.10.10.116:8083/simple-static-web:latest
+          format: table
+          exit-code: 1  # fail job if vulnerabilities found
+
+      # Step 7: Push Docker image
+      - name: Push Docker image
+        run: |
+          docker push 10.10.10.116:8083/simple-static-web:latest
