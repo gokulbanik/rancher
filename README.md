@@ -86,3 +86,13 @@ Staging environment (Rancher Project)
           v
 Production environment (Rancher Project)
 
+# Docker login from admin server
+docker login 10.10.10.116:8083
+
+
+# tag image with my private docker repo
+docker tag simple-static-web:latest 10.10.10.116:8083/simple-static-web:1.0.0
+
+# push to my private repo
+docker push 10.10.10.116:8083/simple-static-web:1.0.0
+
