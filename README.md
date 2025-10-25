@@ -109,3 +109,12 @@ This runner will have the following labels: 'self-hosted', 'Linux', 'X64'
 Enter any additional labels (ex. label-1,label-2): [press Enter to skip]
 
 √ Runner successfully added
+
+# Manual deploy 
+
+kubectl run image-test \
+  --rm -i --tty \
+  --image=10.10.10.116:8083/simple-static-web:1.0.1 \
+  --image-pull-policy=Always \
+  --overrides='{"spec":{"imagePullSecrets":[{"name":"nexus-registry-secret"}]}}' \
+  -n dev-web -- bash
