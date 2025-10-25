@@ -71,8 +71,12 @@ jobs:
 
       - name: Update deployment image tag
         run: |
-          cd rancher/charts/dev
-          kubectl apply -f dev-web-app-argocd.yaml
+          cd rancher
+          helm upgrade --install simple-static-web ./charts/dev \
+            --namespace dev-web \
+            --create-namespace \
+            --set image.repository=${REGISTRY}/${IMAGE_NAME} \
+            --set image.tag=${IMAGE_TAG}
 
       - name: Commit and push manifest changes
         run: |
