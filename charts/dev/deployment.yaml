@@ -14,12 +14,10 @@ spec:
     metadata:
       labels:
         app: simple-static-web
-    spec:   # 👈 only one 'spec' under 'template'
-      imagePullSecrets:
-        - name: nexus-registry-secret	
+    spec:   
       containers:
         - name: simple-static-web
-          image: docker.io/library/simple-static-web:1.0.1
-          imagePullPolicy: Always
+          image: simple-static-web:1.0.1
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
