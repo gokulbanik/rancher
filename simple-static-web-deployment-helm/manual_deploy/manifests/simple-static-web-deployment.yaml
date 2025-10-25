@@ -11,8 +11,8 @@ spec:
     metadata:
       labels:
         app: simple-static-web
-  spec:
-    containers:
+    spec:
+      containers:
       - name: simple-static-web
         image: 10.10.10.116:8083/simple-static-web:1.0.0
         ports:

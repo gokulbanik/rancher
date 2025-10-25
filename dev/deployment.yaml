@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: simple-static-web-dev
+  labels:
+        app: simple-static-web
   namespace: dev-web   # optional, if you want it in dev-web
 spec:
   replicas: 2
@@ -13,8 +15,11 @@ spec:
       labels:
         app: simple-static-web
     spec:   # 👈 only one 'spec' under 'template'
+      imagePullSecrets:
+        - name: nexus-registry-secret	
       containers:
         - name: simple-static-web
           image: 10.10.10.116:8083/simple-static-web:1.0.1
+          imagePullPolicy: Always
           ports:
             - containerPort: 80
