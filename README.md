@@ -132,6 +132,9 @@ kubectl get svc -A | grep 30080
 # for dry run
 kubectl apply --dry-run=client -f deployment.yaml
 
+kubectl -n dev-web rollout restart deploy simple-static-web
+
+
 # Docker Auth
 [root@ol9-admin-01 ~]# cat .docker/config.json
 {

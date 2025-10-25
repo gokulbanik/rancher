@@ -1,9 +1,12 @@
-replicaCount: 2
+replicaCount: 1
 
 image:
-  repository: nginx
-  tag: latest
+  repository: 10.10.10.116:8083/simple-static-web
+  tag: 1.0.2
   pullPolicy: IfNotPresent
+
+imagePullSecrets:
+  - name: nexus-registry-secret
 
 service:
   type: NodePort
