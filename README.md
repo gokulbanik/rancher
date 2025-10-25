@@ -123,3 +123,7 @@ kubectl run image-test \
 
 argocd login 192.168.0.43:8443 --username admin --password Passw0rd1 --insecure
 argocd app delete argocd/dev-web --cascade
+
+# check ports
+sudo netstat -tulnp | grep 30080
+sudo ss -tulnp | grep 30080
