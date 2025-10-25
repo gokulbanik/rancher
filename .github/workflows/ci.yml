@@ -72,7 +72,7 @@ jobs:
       - name: Update deployment image tag
         run: |
           cd rancher/charts/dev
-          argocd app create -f -f dev-web-app-argocd.yaml 
+          argocd app create -f dev-web-app-argocd.yaml 
 
       - name: Commit and push manifest changes
         run: |
