@@ -72,7 +72,7 @@ jobs:
       - name: Update deployment image tag
         run: |
           cd rancher/dev
-          helm upgrade --install simple-static-web ./simple-static-web-chart \
+          helm upgrade --install simple-static-web ./charts/dev \
             --namespace dev-web \
             --create-namespace \
             --set image.repository=${REGISTRY}/${IMAGE_NAME} \
