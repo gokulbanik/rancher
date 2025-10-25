@@ -118,3 +118,8 @@ kubectl run image-test \
   --image-pull-policy=Always \
   --overrides='{"spec":{"imagePullSecrets":[{"name":"nexus-registry-secret"}]}}' \
   -n dev-web -- bash
+
+# Argocd login
+
+argocd login 192.168.0.43:8443 --username admin --password Passw0rd1 --insecure
+argocd app delete argocd/dev-web --cascade
