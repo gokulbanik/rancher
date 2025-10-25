@@ -128,3 +128,6 @@ argocd app delete argocd/dev-web --cascade
 sudo netstat -tulnp | grep 30080
 sudo ss -tulnp | grep 30080
 kubectl get svc -A | grep 30080
+
+# for dry run
+kubectl apply --dry-run=client -f deployment.yaml

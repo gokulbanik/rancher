@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: simple-static-web-dev
+  name: simple-static-web-svc
   labels:
     app: simple-static-web-dev
 spec:
@@ -13,6 +13,3 @@ spec:
       targetPort: 80
       protocol: TCP
       nodePort: 30080
-
-
-
