@@ -13,6 +13,9 @@ env:
 #  IMAGE_TAG: 1.0.${{ github.run_number }}   # auto-increment tag
   IMAGE_TAG: 1.0.1
   REGISTRY: 10.10.10.116:8083
+  ARGOCD_SERVER: "192.168.0.43:8443"
+  ARGOCD_USER: ${{ secrets.ARGOCD_USER }}
+  ARGOCD_PASS: ${{ secrets.ARGOCD_PASS }}
 
 jobs:
   build:
@@ -68,6 +71,15 @@ jobs:
           repository: gokulbanik/rancher
           token: ${{ secrets.RANCHER_REPO_TOKEN }}
           path: rancher
+
+      - name: Login to ArgoCD
+        run: |
+          argocd login $ARGOCD_SERVER \
+            --username $ARGOCD_USER \
+            --password $ARGOCD_PASS \
+            --plaintext
+            --grpc-web
+            --insecure
 
       - name: Update deployment image tag
         run: |
