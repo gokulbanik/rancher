@@ -1,18 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: simple-static-web-dev
+  name: simple-static-web
   namespace: dev-web
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: simple-static-web-dev
+      app: simple-static-web
   template:
     metadata:
       labels:
-        app: simple-static-web-dev
+        app: simple-static-web
     spec:
+      imagePullSecrets:
+        - name: nexus-registry-secret
       containers:
         - name: simple-static-web
           image: simple-static-web:1.0.1
