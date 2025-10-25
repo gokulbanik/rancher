@@ -127,3 +127,4 @@ argocd app delete argocd/dev-web --cascade
 # check ports
 sudo netstat -tulnp | grep 30080
 sudo ss -tulnp | grep 30080
+kubectl get svc -A | grep 30080
