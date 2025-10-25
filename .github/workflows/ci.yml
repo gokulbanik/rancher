@@ -74,12 +74,7 @@ jobs:
 
       - name: Login to ArgoCD
         run: |
-          argocd login $ARGOCD_SERVER \
-            --username $ARGOCD_USER \
-            --password $ARGOCD_PASS \
-            --plaintext
-            --grpc-web
-            --insecure
+          argocd login $ARGOCD_SERVER --username $ARGOCD_USER --password $ARGOCD_PASS --plaintext --grpc-web --insecure 
 
       - name: Update deployment image tag
         run: |
