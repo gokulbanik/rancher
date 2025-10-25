@@ -131,3 +131,16 @@ kubectl get svc -A | grep 30080
 
 # for dry run
 kubectl apply --dry-run=client -f deployment.yaml
+
+# Docker Auth
+[root@ol9-admin-01 ~]# cat .docker/config.json
+{
+        "auths": {
+                "10.10.10.116:8083": {
+                        "auth": "YWRtaW46MTIzNDU2"
+                },
+                "https://index.docker.io/v1/": {
+                        "auth": "Z29rdWxkb2NrZXIyMDA4OmRja3JfcGF0X2k1aTBGenRlcHpnVkdkWFJTOWR3TV9RSUUwUQ=="
+                }
+        }
+cat ~/.docker/config.json | base64 -w0
