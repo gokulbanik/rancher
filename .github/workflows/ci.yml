@@ -11,7 +11,7 @@ on:
 env:
   IMAGE_NAME: simple-static-web
 #  IMAGE_TAG: 1.0.${{ github.run_number }}   # auto-increment tag
-  IMAGE_TAG: 1.0.4
+  IMAGE_TAG: 1.0.1
   REGISTRY: 10.10.10.116:8083
 
 jobs:

@@ -147,3 +147,8 @@ kubectl -n dev-web rollout restart deploy simple-static-web
                 }
         }
 cat ~/.docker/config.json | base64 -w0
+
+# Manually transfer the images
+
+ctr -n k8s.io images ls | grep simple
+
