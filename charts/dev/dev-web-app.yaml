@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: dev-web
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/gokulbanik/rancher.git'   # <-- replace with your real repo URL
+    targetRevision: main
+    path: charts/dev
+    helm:
+    valueFiles:
+      - values.yaml
+    parameters:
+      - name: image.tag
+        value: 1.0.1
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: dev-web
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
