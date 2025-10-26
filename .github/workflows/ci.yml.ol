@@ -3,14 +3,14 @@ name: Build, Scan & Deploy (Dev)
 on:
   push:
     branches:
-      - dev        # <-- trigger when code is pushed to dev
+      - main
   pull_request:
     branches:
-      - dev  
+      - main
 
 env:
   IMAGE_NAME: simple-static-web
-  IMAGE_TAG: 1.0.${{ github.run_number }}-${{ github.ref_name }}   # auto-increment tag
+  IMAGE_TAG: 1.0.${{ github.run_number }}   # auto-increment tag
 #  IMAGE_TAG: 1.0.1
   REGISTRY: 10.10.10.116:8083
   ARGOCD_SERVER: "192.168.0.43:8443"
@@ -76,10 +76,10 @@ jobs:
         run: |
           argocd login $ARGOCD_SERVER --username $ARGOCD_USER --password $ARGOCD_PASS --plaintext --grpc-web --insecure 
 
-      - name: Sync ArgoCD App
+      - name: Update deployment image tag
         run: |
           cd rancher/charts/dev
-          argocd app sync dev-web --grpc-web --insecure 
+          argocd app create -f dev-web-app-argocd.yaml 
 
       - name: Commit and push manifest changes
         run: |
