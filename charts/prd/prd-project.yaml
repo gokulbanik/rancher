@@ -14,5 +14,3 @@ spec:
   clusterResourceWhitelist:
     - group: '*'
       kind: '*'
-  syncOptions:
-      - CreateNamespace=true
