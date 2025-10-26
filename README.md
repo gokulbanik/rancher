@@ -158,3 +158,19 @@ git push --set-upstream origin future
 git branch  
 git ls-remote --heads origin 
 git push origin --delete
+git tag -d v1.0.0
+git push origin :refs/tags/v1.0.0
+git tag v1.0.0
+git push origin v1.0.0
+# delete local tags
+git tag -l | xargs git tag -d
+# Delete all remote tags
+git tag -l | xargs -n 1 git push --delete origin
+
+# verify
+git fetch --tags
+git tag -l
+
+# Push a fresh tag
+git tag v1.0.0
+git push origin v1.0.0
