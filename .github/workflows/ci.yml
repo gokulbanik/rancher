@@ -24,6 +24,7 @@ jobs:
   build:
     name: 🏗️ Build & Push Docker Image
     runs-on: self-hosted
+    if: startsWith(github.ref_name, 'feature/')
 
     steps:
       - name: Checkout Code
@@ -58,6 +59,7 @@ jobs:
     name: 🔍 Scan Docker Image
     runs-on: self-hosted
     needs: build
+    if: startsWith(github.ref_name, 'feature/')
 
     steps:
       - name: Checkout Code
