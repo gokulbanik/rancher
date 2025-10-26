@@ -134,6 +134,7 @@ jobs:
 
       - name: Sync ArgoCD App
         run: |
+          GITHUB_REF_NAME="prd"
           NAMESPACE="prd-web"
           APP_NAME="prd-web"
 
