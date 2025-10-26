@@ -34,7 +34,7 @@ jobs:
 
       - name: Log in to Nexus Docker Registry
         run: |
-          echo "${{ secrets.NEXUS_PASSWORD }}" | docker login ${{ env.REGISTRY }} -u "${{ secrets.NEXUS_USERNAME }}" --password-stdin
+          echo "${{ secrets.NEXUS_PASSWORD }}" | docker login ${{ env.REGISTRY }} -u "${{ secrets.NEXUS_USERNAME }}" --password-stdin --tls-verify=false
 
       - name: Set Image Tag Dynamically
         id: vars
