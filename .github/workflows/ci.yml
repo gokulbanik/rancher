@@ -134,11 +134,10 @@ jobs:
 
       - name: Sync ArgoCD App
         run: |
-          GITHUB_REF_NAME="prd"
           NAMESPACE="prd-web"
           APP_NAME="prd-web"
 
-          cd rancher/charts/${GITHUB_REF_NAME}
+          cd rancher/charts/prd
           argocd app sync $APP_NAME --grpc-web --insecure
 
 
