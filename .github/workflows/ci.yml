@@ -2,6 +2,8 @@ name: Build, Scan & Deploy (Multi-Env)
 
 on:
   push:
+    tags:
+      - 'v*'
     branches:
       - 'feature/*' 
       - dev

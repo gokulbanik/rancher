@@ -155,5 +155,6 @@ ctr -n k8s.io images ls | grep simple
 # Git:
 git checkout -b dev origin/dev
 git push --set-upstream origin future
-git ls-remote --heads origin
-git checkout -b feature
+git branch  
+git ls-remote --heads origin 
+git push origin --delete 
