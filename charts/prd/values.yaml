@@ -1,8 +1,8 @@
 replicaCount: 1
 
 image:
-  repository: 10.10.10.116:8083/simple-static-web
-  tag: v1
+  repository: docker.io/library/simple-static-web:1.0.1
+  tag: 1.0.1
   pullPolicy: IfNotPresent
 
 imagePullSecrets:

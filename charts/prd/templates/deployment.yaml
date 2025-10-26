@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: {{ include "simple-static-web.fullname" . }}
   labels:
-    app: {{ include "simple-static-web.name" . }}
+    {{- include "simple-static-web.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -14,6 +14,7 @@ spec:
       labels:
         app: {{ include "simple-static-web.name" . }}
     spec:
+      serviceAccountName: {{ include "simple-static-web.serviceAccountName" . }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
