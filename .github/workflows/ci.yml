@@ -27,7 +27,7 @@ jobs:
   build:
     name: 🏗️ Build & Push Docker Image
     runs-on: self-hosted
-    if: startsWith(github.ref_name, 'feature/')
+    if: "!contains(github.event.head_commit.message, '[skip ci]') && startsWith(github.ref_name, 'feature/')"
     outputs:
       image-tag: ${{ steps.set-tag.outputs.image-tag }}
 
@@ -63,7 +63,7 @@ jobs:
     name: 🔍 Scan Docker Image
     runs-on: self-hosted
     needs: build
-    if: startsWith(github.ref_name, 'feature/')
+    if: "!contains(github.event.head_commit.message, '[skip ci]') &&  startsWith(github.ref_name, 'feature/')"
 
     steps:
       - name: Checkout Code
@@ -141,7 +141,7 @@ jobs:
           NAMESPACE="prd-web"
           APP_NAME="prd-web"
 
-          cd rancher/charts/${GITHUB_REF_NAME}
+          cd rancher/charts/prd
           argocd app sync $APP_NAME --grpc-web --insecure
 
 
