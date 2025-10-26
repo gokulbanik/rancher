@@ -1,0 +1,18 @@
+# dev-project.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: prd_project
+  namespace: argocd
+spec:
+  description: Dev environment applications
+  sourceRepos:
+    - 'https://github.com/gokulbanik/rancher.git'
+  destinations:
+    - namespace: prd-web
+      server: 'https://kubernetes.default.svc'
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
+  syncOptions:
+      - CreateNamespace=true
