@@ -152,3 +152,6 @@ cat ~/.docker/config.json | base64 -w0
 
 ctr -n k8s.io images ls | grep simple
 
+# Git:
+git checkout -b dev origin/dev
+git push --set-upstream origin future
