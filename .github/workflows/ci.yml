@@ -57,14 +57,6 @@ jobs:
         run: |
           docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
 
-#      - name: Set Image Tag Dynamically
-#        id: vars
-#        run: |
-#          BRANCH=$(echo "${GITHUB_REF_NAME}" | tr '/' '-')
-#          SHORT_SHA=$(echo "${GITHUB_SHA::7}")
-#          echo "IMAGE_TAG=${BRANCH}-${SHORT_SHA}" >> $GITHUB_ENV
-#          echo "Image tag will be: ${BRANCH}-${SHORT_SHA}"
-
 #      - name: Build & Push with Cache
 #        uses: docker/build-push-action@v4
 #        with:
