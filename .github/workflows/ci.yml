@@ -77,7 +77,6 @@ jobs:
   deploy:
     name: 🚀 Deploy via ArgoCD (Dynamic Env)
     runs-on: self-hosted
-    needs: scan
     if: |
       github.ref_name == 'dev' || 
       github.ref_name == 'staging' || 
