@@ -29,14 +29,22 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v2
 
       - name: Log in to Nexus Docker Registry
         run: |
           echo "${{ secrets.NEXUS_PASSWORD }}" | docker login ${{ env.REGISTRY }} -u "${{ secrets.NEXUS_USERNAME }}" --password-stdin
+      
+      - name: Build Docker Image
+        run: |
+          docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} ./simple-static-web
+
+      - name: Push Docker Image to Nexus
+        run: |
+          docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
 
 #      - name: Set Image Tag Dynamically
 #        id: vars
@@ -46,15 +54,15 @@ jobs:
 #          echo "IMAGE_TAG=${BRANCH}-${SHORT_SHA}" >> $GITHUB_ENV
 #          echo "Image tag will be: ${BRANCH}-${SHORT_SHA}"
 
-      - name: Build & Push with Cache
-        uses: docker/build-push-action@v4
-        with:
-          context: ./simple-static-web
-          push: true
-          tags: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
-          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:cache
-          cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:cache,mode=max
+#      - name: Build & Push with Cache
+#        uses: docker/build-push-action@v4
+#        with:
+#          context: ./simple-static-web
+#          push: true
+#          tags: |
+#            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+#          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:cache
+#          cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:cache,mode=max
 
   scan:
     name: 🔍 Scan Docker Image
