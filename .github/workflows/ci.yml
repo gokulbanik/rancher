@@ -15,6 +15,7 @@ on:
 
 env:
   IMAGE_NAME: simple-static-web
+  IMAGE_TAG: 1.0.${{ github.run_number }}-${{ github.ref_name }}
   REGISTRY: 10.10.10.116:8083
   ARGOCD_SERVER: "192.168.0.43:8443"
   ARGOCD_USER: ${{ secrets.ARGOCD_USER }}
@@ -37,13 +38,13 @@ jobs:
         run: |
           echo "${{ secrets.NEXUS_PASSWORD }}" | docker login ${{ env.REGISTRY }} -u "${{ secrets.NEXUS_USERNAME }}" --password-stdin
 
-      - name: Set Image Tag Dynamically
-        id: vars
-        run: |
-          BRANCH=$(echo "${GITHUB_REF_NAME}" | tr '/' '-')
-          SHORT_SHA=$(echo "${GITHUB_SHA::7}")
-          echo "IMAGE_TAG=${BRANCH}-${SHORT_SHA}" >> $GITHUB_ENV
-          echo "Image tag will be: ${BRANCH}-${SHORT_SHA}"
+#      - name: Set Image Tag Dynamically
+#        id: vars
+#        run: |
+#          BRANCH=$(echo "${GITHUB_REF_NAME}" | tr '/' '-')
+#          SHORT_SHA=$(echo "${GITHUB_SHA::7}")
+#          echo "IMAGE_TAG=${BRANCH}-${SHORT_SHA}" >> $GITHUB_ENV
+#          echo "Image tag will be: ${BRANCH}-${SHORT_SHA}"
 
       - name: Build & Push with Cache
         uses: docker/build-push-action@v4
