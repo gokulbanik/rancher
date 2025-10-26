@@ -165,8 +165,9 @@ git push origin v1.0.0
 # delete local tags
 git tag -l | xargs git tag -d
 # Delete all remote tags
-git tag -l | xargs -n 1 git push --delete origin
-
+git push --delete origin v1.0.0
+# delete local tags
+git tag -d v1.0.0
 # verify
 git fetch --tags
 git tag -l
