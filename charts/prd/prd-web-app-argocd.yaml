@@ -4,7 +4,7 @@ metadata:
   name: prd-web
   namespace: argocd
 spec:
-  project: prd_project
+  project: prd-project
   source:
     repoURL: 'https://github.com/gokulbanik/rancher.git'   # <-- replace with your real repo URL
     targetRevision: main
