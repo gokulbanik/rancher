@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: simple-static-web-dev
+  name: simple-static-web-prd
   labels:
         app: simple-static-web
   namespace: prd-web   # optional, if you want it in dev-web
