@@ -141,7 +141,7 @@ jobs:
           NAMESPACE="prd-web"
           APP_NAME="prd-web"
 
-          cd rancher/charts/prd
+          cd rancher/charts/${GITHUB_REF_NAME}
           argocd app sync $APP_NAME --grpc-web --insecure
 
 
