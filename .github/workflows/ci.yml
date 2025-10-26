@@ -122,6 +122,7 @@ jobs:
 
   deploy-prd:
     runs-on: self-hosted
+    if: startsWith(github.ref_name, 'main')
     environment:
       name: production    # <- Required reviewers set in GitHub environment
     steps:
