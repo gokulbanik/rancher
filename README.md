@@ -157,4 +157,4 @@ git checkout -b dev origin/dev
 git push --set-upstream origin future
 git branch  
 git ls-remote --heads origin 
-git push origin --delete 
+git push origin --delete
