@@ -3,7 +3,8 @@ name: Build, Scan & Deploy (Multi-Env)
 on:
   push:
     branches:
-      - 'feature/*'   # feature branches
+      - 'feature/*' 
+      - future  
       - dev
       - staging
       - main
