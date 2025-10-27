@@ -1,0 +1,31 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: simple-static-web-ingress
+  namespace: dev-web
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+#  tls:
+#    - hosts:
+#        - ol9-admin-01.nip.io
+#      secretName: marcel-tls-secret
+  rules:
+    - host: ol9-admin-01.nip.io
+      http:
+        paths:
+          - path: /v1/hello
+            pathType: Prefix
+            backend:
+              service:
+                name: simple-static-web-svc
+                port:
+                  number: 80
+          - path: /v2/hello
+            pathType: Prefix
+            backend:
+              service:
+                name: simple-static-web-svc
+                port:
+                  number: 80
