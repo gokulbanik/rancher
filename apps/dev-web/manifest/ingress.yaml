@@ -1,18 +1,31 @@
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: simple-static-web-ingress
-  namespace: dev-web
+  name: nginx-ingress
+  namespace: ingress-nginx
 spec:
-  ingressClassName: nginx
-  rules:
-    - host: ol9-admin-01.nip.io
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: simple-static-web-svc
-                port:
-                  number: 80
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ingress-nginx
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ingress-nginx
+    spec:
+      serviceAccountName: ingress-nginx-nginx-ingress
+      containers:
+        - name: controller
+          image: registry.k8s.io/ingress-nginx/controller:v1.11.3
+          args:
+            - /nginx-ingress-controller
+            - --ingress-class=nginx
+            - --publish-service=$(POD_NAMESPACE)/ingress-nginx-nginx-ingress
+            - --election-id=ingress-controller-leader
+            - --controller-class=k8s.io/ingress-nginx
+            - --watch-namespace=
+          ports:
+            - name: http
+              containerPort: 80
+            - name: https
+              containerPort: 443
