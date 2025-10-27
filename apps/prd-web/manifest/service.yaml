@@ -9,5 +9,5 @@ spec:
   type: ClusterIP  # or LoadBalancer if your environment supports it
   ports:
   - protocol: TCP
-    port: 81
+    port: 80
     targetPort: 81
