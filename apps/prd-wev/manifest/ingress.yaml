@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: simple-static-web-ingress
+  namespace: prd-web
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /   # Rewrite /dev-web -> /
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: ol9-admin-01.nip.io
+    http:
+      paths:
+      - path: /prd-web
+        pathType: Prefix
+        backend:
+          service:
+            name: simple-static-web-svc
+            port:
+              number: 80
