@@ -1,25 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "simple-static-web.fullname" . }}
+  name: {{ .Values.app.name }}-deployment
   labels:
-    {{- include "simple-static-web.labels" . | nindent 4 }}
+    app: {{ .Values.app.name }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.replicaCount | default 1 }}
   selector:
     matchLabels:
-      app: {{ include "simple-static-web.name" . }}
+      app: {{ .Values.app.name }}
   template:
     metadata:
       labels:
-        app: {{ include "simple-static-web.name" . }}
+        app: {{ .Values.app.name }}
     spec:
-      serviceAccountName: {{ include "simple-static-web.serviceAccountName" . }}
+      serviceAccountName: {{ .Values.app.serviceAccountName | default "default" }}
       containers:
-        - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+        - name: {{ .Values.app.name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default "latest" }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy | default "IfNotPresent" }}
           ports:
-            - containerPort: 80
+            - containerPort: {{ .Values.containerPort | default 80 }}
+      {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml .Values.imagePullSecrets | nindent 8 }}
+      {{- end }}

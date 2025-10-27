@@ -1,17 +1,24 @@
 replicaCount: 1
 
 image:
-  repository: docker.io/library/simple-static-web:1.0.1
+  repository: simple-static-web:1.0.1
   tag: 1.0.1
   pullPolicy: IfNotPresent
 
-imagePullSecrets:
-  - name: nexus-registry-secret
+imagePullSecrets: []
+#  - name: nexus-registry-secret
+
+app:
+  name: simple-static-web
+  serviceName: simple-static-web-svc
 
 service:
-  type: NodePort
+  type: ClusterIP 
   port: 80
   nodePort: 30080  # Optional: specify a NodePort
+
+nameOverride: ""
+fullnameOverride: ""
 
 serviceAccount:
   create: true

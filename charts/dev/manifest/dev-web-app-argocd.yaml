@@ -9,12 +9,6 @@ spec:
     repoURL: 'https://github.com/gokulbanik/rancher.git'   # <-- replace with your real repo URL
     targetRevision: main
     path: charts/dev
-    helm:
-    valueFiles:
-      - values.yaml
-    parameters:
-      - name: image.tag
-        value: 1.0.1
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: dev-web
