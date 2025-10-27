@@ -15,7 +15,6 @@ app:
 service:
   type: ClusterIP 
   port: 80
-  nodePort: 30080  # Optional: specify a NodePort
   sessionAffinity: None
 
 nameOverride: ""
