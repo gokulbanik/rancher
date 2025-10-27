@@ -4,9 +4,9 @@ metadata:
   name: simple-static-web-ingress
   namespace: dev-web
   annotations:
-    kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/rewrite-target: /   # Rewrite /dev-web -> /
 spec:
+  ingressClassName: nginx
   rules:
   - host: ol9-admin-01.nip.io
     http:
