@@ -178,3 +178,36 @@ git tag -l
 # Push a fresh tag
 git tag v1.0.0
 git push origin v1.0.0
+
+                     ┌─────────────────────────────┐
+                     │       External Clients       │
+                     │   (Browser, API, etc.)      │
+                     └─────────────┬──────────────┘
+                                   │  HTTP/HTTPS
+                                   ▼
+                     ┌─────────────────────────────┐
+                     │          HAProxy            │
+                     │  (Reverse Proxy / Load Balancer)
+                     │   Host-based routing        │
+                     └─────────────┬──────────────┘
+                                   │
+                                   ▼
+                     ┌─────────────────────────────┐
+                     │ Kubernetes Node (any)       │
+                     │ NodePort: 32741             │
+                     │ Ingress Controller: nginx   │
+                     └─────────────┬──────────────┘
+                                   │
+              ┌────────────────────┴────────────────────┐
+              │                                         │
+   ┌──────────▼──────────┐                     ┌────────▼─────────┐
+   │ Namespace: dev-web  │                     │ Namespace: prd-web │
+   │ Ingress: dev-web-ingress │                 │ Ingress: prd-web-ingress │
+   │ Path: /dev-web      │                     │ Path: /prd-web      │
+   │ Service: dev-web-svc│                     │ Service: prd-web-svc │
+   └──────────┬──────────┘                     └─────────┬─────────┘
+              │                                         │
+   ┌──────────▼──────────┐                     ┌────────▼─────────┐
+   │ Pod(s) dev-web      │                     │ Pod(s) prd-web  │
+   │ Container: web app  │                     │ Container: web app │
+   └─────────────────────┘                     └─────────────────┘

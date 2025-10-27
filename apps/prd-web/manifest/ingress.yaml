@@ -17,4 +17,4 @@ spec:
           service:
             name: simple-static-web-svc
             port:
-              number: 80
+              number: 81
