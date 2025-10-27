@@ -110,6 +110,9 @@ Enter any additional labels (ex. label-1,label-2): [press Enter to skip]
 
 √ Runner successfully added
 
+## validate scripts 
+helm template ./dev --values ./dev/values.yaml --namespace dev-web --debug
+
 # Manual deploy 
 
 kubectl run image-test \
