@@ -4,6 +4,7 @@ metadata:
   name: simple-static-web-ingress
   namespace: dev-web
 spec:
+  ingressClassName: nginx
   rules:
     - host: ol9-admin-01.nip.io
       http:
