@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: simple-static-web-svc
+  name: simple-static-web-prd-svc
   namespace: prd-web
 spec:
   selector:

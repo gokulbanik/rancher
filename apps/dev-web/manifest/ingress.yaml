@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: simple-static-web-ingress
+  name: simple-static-web-dev-ingress
   namespace: dev-web
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /   # Rewrite /dev-web -> /
@@ -15,6 +15,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: simple-static-web-svc
+            name: simple-static-web-dev-svc
             port:
               number: 80
