@@ -20,4 +20,4 @@ spec:
           image: simple-static-web:1.0.1
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 81
+            - containerPort: 80
