@@ -179,18 +179,18 @@ git tag -l
 git tag v1.0.0
 git push origin v1.0.0
 
-                        ┌─────────────────────────────┐
-                     │       External Clients       │
+                     ┌─────────────────────────────┐
+                     │       External Clients      │
                      │   (Browser, API, etc.)      │
-                     └─────────────┬──────────────┘
+                     └─────────────┬──────────-────┘
                                    │  HTTP/HTTPS 80/443
                                    ▼
-                     ┌─────────────────────────────┐
-                     │          HAProxy            │
-                     │  (Reverse Proxy / Load Balancer)
-                     │   Host-based routing        │
-                     │   Forward to NodePort 32741 │
-                     └─────────────┬──────────────┘
+                     ┌────────────────────────────-----─┐
+                     │          HAProxy 192.168.0.75    │
+                     │  (Reverse Proxy / Load Balancer) |  
+                     │   Host-based routing             │
+                     │   Forward to NodePort 32741      │
+                     └─────────────┬──────────────------┘
                                    │
                                    ▼
                      ┌─────────────────────────────┐
@@ -198,18 +198,18 @@ git push origin v1.0.0
                      │ NodePort: 32741             │
                      │ Ingress Controller: nginx   │
                      │ Listens on 80/443           │
-                     └─────────────┬──────────────┘
+                     └─────────────┬───────────-───┘
                                    │
-              ┌────────────────────┴────────────────────┐
-              │                                         │
-   ┌──────────▼──────────┐                     ┌────────▼─────────┐
-   │ Namespace: dev-web  │                     │ Namespace: prd-web │
-   │ Ingress: dev-web-ingress │                 │ Ingress: prd-web-ingress │
-   │ Path: /dev-web      │                     │ Path: /prd-web      │
-   │ Service: dev-web-svc │ Port: 80          │ Service: prd-web-svc │ Port: 80
-   └──────────┬──────────┘                     └─────────┬─────────┘
-              │                                         │
-   ┌──────────▼──────────┐                     ┌────────▼─────────┐
-   │ Pod(s) dev-web      │                     │ Pod(s) prd-web  │
-   │ Container: web app  │ Port: 80            │ Container: web app │ Port: 80
-   └─────────────────────┘                     └─────────────────┘
+              ┌────────────────────┴───────────------------─────────┐
+              │                                                     │
+   ┌──────────▼──────------------────┐                     ┌────────▼───---------------──────┐
+   │ Namespace: dev-web              │                     │ Namespace: prd-web              │
+   │ Ingress: dev-web-ingress        │                     │ Ingress: prd-web-ingress        │
+   │ Path: /dev-web                  │                     │ Path: /prd-web                  │
+   │ Service: dev-web-svc │ Port: 80 |                     │ Service: prd-web-svc │ Port: 80 |
+   └──────────┬─────────------------─┘                     └─────────┬───────--------------──┘
+              │                                                      │
+   ┌──────────▼──────────┐                                  ┌────────▼──--───────┐
+   │ Pod(s) dev-web      │                                  │ Pod(s) prd-web     │
+   │ Container: web app  │ Port: 80                         │ Container: web app │ Port: 80
+   └─────────────────────┘                                  └─────────────────---┘
