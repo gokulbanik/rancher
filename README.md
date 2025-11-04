@@ -179,6 +179,10 @@ git tag -l
 git tag v1.0.0
 git push origin v1.0.0
 
+Curretn setup:
+
+External clients → HAProxy → NodePort (Ingress Controller) → Ingress → ClusterIP (App)
+
                      ┌─────────────────────────────┐
                      │       External Clients      │
                      │   (Browser, API, etc.)      │
@@ -213,3 +217,7 @@ git push origin v1.0.0
    │ Pod(s) dev-web      │                                  │ Pod(s) prd-web     │
    │ Container: web app  │ Port: 80                         │ Container: web app │ Port: 80
    └─────────────────────┘                                  └─────────────────---┘
+
+Cloud setup:
+
+External client → Cloud LoadBalancer → App Service → Pod
