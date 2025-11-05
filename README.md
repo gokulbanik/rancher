@@ -250,6 +250,7 @@ htpasswd -c auth htuser
 # It will prompt for a password
 
 Step 2: Create a Kubernetes Secret with the .htpasswd file
+## for base64 password use command cat auth | base64 -w 0 ##
 
 kubectl create secret generic basic-auth-secret-dev \
   --from-file=/tmp/auth \
