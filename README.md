@@ -131,9 +131,18 @@ sudo netstat -tulnp | grep 30080
 sudo ss -tulnp | grep 30080
 kubectl get svc -A | grep 30080
 
-# for dry run
+# for dry run ** very useful before atual use the code
 kubectl apply --dry-run=client -f deployment.yaml
 
+# To make config file
+kubectl create configmap dev-html --from-file=index.html=index-dev.html \
+  --dry-run=client -o yaml
+
+kubectl create configmap dev-html \
+  --from-file=index.html=index-dev.html \
+  --dry-run=client -o yaml > dev-html-configmap.yaml
+
+# To restart the pods
 kubectl -n dev-web rollout restart deploy simple-static-web
 
 
@@ -219,3 +228,13 @@ External clients → HAProxy → NodePort (Ingress Controller) → Ingress → C
 Cloud setup:
 
 External client → Cloud LoadBalancer → App Service → Pod
+
+## case study for removal app from argocd
+## error patching application with finalizers: Application.argoproj.io \"prd-web\" is invalid: metadata.finalizers: Forbidden:
+
+kubectl patch application prd-web \
+  -n argocd \
+  -p '{"metadata":{"finalizers":null}}' --type=merge
+
+ argocd app delete prd-web --cascade
+ 

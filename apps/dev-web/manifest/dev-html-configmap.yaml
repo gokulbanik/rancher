@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: dev-html
-  namespace: default   # change namespace if needed
+  namespace: dev-web   # change namespace if needed
 data:
   index.html: |
     <!DOCTYPE html>

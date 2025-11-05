@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: dev-web
-  namespace: default
+  name: prd-web
+  namespace: prd-web
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: dev-web
+      app: prd-web
   template:
     metadata:
       labels:
-        app: dev-web
+        app: prd-web
     spec:
       containers:
-      - name: web
+      - name: prd-web
         image: simple-static-web:1.0.1
         ports:
         - containerPort: 80
