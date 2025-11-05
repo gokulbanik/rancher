@@ -5,7 +5,7 @@ metadata:
   namespace: prd-web
 spec:
   selector:
-    app: simple-static-web
+    app: prd-web
   type: ClusterIP  # or LoadBalancer if your environment supports it
   ports:
   - protocol: TCP
