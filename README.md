@@ -1,10 +1,9 @@
 # rancher
+# Port using till now for checking
 
-Port using till now for checking
+sudo ss -tuln |grep 443
 
-[root@ol9-admin-01 devops]# sudo ss -tuln
-
-[root@ol9-admin-01 devops]# sudo netstat -tuln
+sudo netstat -tuln |grep 443
 # First day lab:
 helm install nginx-demo ./nginx-demo --namespace prd-web --create-namespace
 
@@ -13,7 +12,6 @@ kubectl get svc -n prd-web
 
 # Now removed deployment from rancher --> works 
 # But we have delete svc manually
-
 # For redeploy with helm
 
 [root@ol9-admin-01 rancher]# helm uninstall nginx-demo -n prd-web

@@ -1,23 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: simple-static-web-dev
-  labels:
-        app: simple-static-web
-  namespace: dev-web   
+  name: dev-web
+  namespace: default
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: simple-static-web
+      app: dev-web
   template:
     metadata:
       labels:
-        app: simple-static-web
-    spec:   
+        app: dev-web
+    spec:
       containers:
-        - name: simple-static-web
-          image: simple-static-web:1.0.1
-          imagePullPolicy: IfNotPresent
-          ports:
-            - containerPort: 80
+      - name: web
+        image: simple-static-web:1.0.1
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: html
+          mountPath: /usr/share/nginx/html
+      volumes:
+      - name: html
+        configMap:
+          name: dev-html 
