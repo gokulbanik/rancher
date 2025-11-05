@@ -20,7 +20,8 @@ spec:
         - containerPort: 80
         volumeMounts:
         - name: auth
-          mountPath: /etc/nginx/auth
+          mountPath: /etc/nginx/auth/auth
+          subPath: auth
           readOnly: true
         - name: html
           mountPath: /usr/share/nginx/html
