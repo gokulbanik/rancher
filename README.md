@@ -259,6 +259,10 @@ kubectl create secret generic basic-auth-secret-dev \
   --from-file=/tmp/auth1 \
   -n prd-web
 
+OR
+
+use manifest **
+
 Step 3: Update Deployment to mount Secret
 # Edit deployment with secret
 
