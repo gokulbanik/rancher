@@ -141,11 +141,8 @@ kubectl create configmap dev-html --from-file=index.html=index-dev.html \
 kubectl create configmap dev-html \
   --from-file=index.html=index-dev.html \
   --dry-run=client -o yaml > dev-html-configmap.yaml
-
 # To restart the pods
 kubectl -n dev-web rollout restart deploy simple-static-web
-
-
 # Docker Auth
 [root@ol9-admin-01 ~]# cat .docker/config.json
 {
@@ -284,7 +281,6 @@ spec:
   - name: auth
     secret:
       secretName: basic-auth-secret
-
 
 Step 4: Configure NGINX to use the Secret
 

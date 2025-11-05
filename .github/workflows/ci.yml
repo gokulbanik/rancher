@@ -143,8 +143,6 @@ jobs:
 
           cd rancher/charts/${GITHUB_REF_NAME}
           argocd app sync $APP_NAME --grpc-web --insecure
-
-
   
 #    steps:
 #      - name: Slack Notification
