@@ -25,10 +25,17 @@ spec:
           readOnly: true
         - name: html
           mountPath: /usr/share/nginx/html
+        - name: auth
+          mountPath: /etc/nginx/auth/auth
+          subPath: auth
+          readOnly: true
       volumes:
       - name: nginx-config
-        secret:
-          secretName: basic-auth-secret-dev
+        configMap:
+          name: dev-nginx-config
       - name: html
         configMap:
-          name: dev-html 
+          name: dev-html
+      - name: auth
+        secret:
+          secretName: basic-auth-secret-dev
