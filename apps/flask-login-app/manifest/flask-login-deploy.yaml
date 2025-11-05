@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-login
+  namespace: flask-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask-login
+  template:
+    metadata:
+      labels:
+        app: flask-login
+    spec:
+      containers:
+      - name: flask-login
+        image: flask-login-app:1.0  # (your built image; push to registry if needed)
+        ports:
+        - containerPort: 5000
+        envFrom:
+        - secretRef:
+            name: flask-login-secret

@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: flask-login-ingress
+  namespace: flask-web
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: ol9-admin-01.nip.io
+    http:
+      paths:
+      - path: /flask
+        pathType: Prefix
+        backend:
+          service:
+            name: flask-login-svc
+            port:
+              number: 80
