@@ -53,7 +53,7 @@ jobs:
    
       - name: Build Docker Image
         run: |
-          docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} ./simple-static-web
+          docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} ./flask-login-app
 
       - name: Push Docker Image to Nexus
         run: |
