@@ -7,7 +7,7 @@ spec:
   project: flask-project
   source:
     repoURL: 'https://github.com/gokulbanik/rancher.git'   # <-- replace with your real repo URL
-    targetRevision: main
+    targetRevision: dev
     path: apps/flask-login-app/manifest
   destination:
     server: 'https://kubernetes.default.svc'
