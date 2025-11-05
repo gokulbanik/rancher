@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: prd-web
-  namespace: dev-web 
+  namespace: prd-web 
 spec:
   replicas: 1
   selector:
