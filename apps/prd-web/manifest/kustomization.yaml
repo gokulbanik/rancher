@@ -1,6 +1,8 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
+  - ngnix-secret.yaml
+  - prd-nginx-config.yaml
   - prd-html-configmap.yaml
   - deployment.yaml
   - service.yaml
