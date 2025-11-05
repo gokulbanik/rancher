@@ -240,6 +240,9 @@ kubectl patch application prd-web \
  
  ## project for secrets and security
 
+ ## Work flow:
+ htpasswd → Kubernetes Secret → Pod Volume Mount → NGINX Config → Browser Login
+
  Step 1: Generate .htpasswd for Basic Auth
  # Install htpasswd if missing (Linux)
 sudo apt install apache2-utils   # Ubuntu/Debian
