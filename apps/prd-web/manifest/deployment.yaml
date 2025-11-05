@@ -24,4 +24,4 @@ spec:
       volumes:
       - name: html
         configMap:
-          name: prd-html   # use prod-html for prod deployment
+          name: prd-html  
