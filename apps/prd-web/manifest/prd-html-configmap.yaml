@@ -19,4 +19,4 @@ kind: ConfigMap
 metadata:
   creationTimestamp: null
   name: prd-html
-namespace: dev-web
+

@@ -19,4 +19,3 @@ kind: ConfigMap
 metadata:
   creationTimestamp: null
   name: dev-html
-namespace: dev-web
