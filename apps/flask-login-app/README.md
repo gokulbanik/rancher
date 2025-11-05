@@ -4,4 +4,3 @@ scp flask-login-app.tar oracle9@10.10.10.109:/tmp/
 scp flask-login-app.tar oracle9@10.10.10.110:/tmp/
 docker load -i /tmp/flask-login-app.tar
 docker images | grep flask-login-app
-
