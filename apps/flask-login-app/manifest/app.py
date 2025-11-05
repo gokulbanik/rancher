@@ -2,6 +2,7 @@ from flask import Flask, request, render_template_string
 import os
 
 app = Flask(__name__)
+app.config['APPLICATION_ROOT'] = '/flask'
 
 # Get credentials from environment variables
 USERNAME = os.getenv("APP_USERNAME", "admin")
@@ -22,11 +23,11 @@ HTML_FORM = """
 </html>
 """
 
-@app.route("/")
+@app.route('/')
 def home():
-    return HTML_FORM
+    return "Flask Login Home"
 
-@app.route("/login", methods=["POST"])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     user = request.form.get("username")
     pwd = request.form.get("password")
