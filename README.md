@@ -295,3 +295,8 @@ kubectl create configmap prd-nginx-config \
   --from-file=nginx.conf=nginx.conf \
   -n prd-web \
   --dry-run=client -o yaml > prd-nginx-config.yaml
+
+## troubleshooing: To reload service inside the pod , checking nginx config
+
+kubectl exec -it dev-web-79f695bf66-xc8br -n dev-web -- nginx -s reload
+kubectl exec -it dev-web-79f695bf66-xc8br -n dev-web -- nginx -t
