@@ -238,3 +238,56 @@ kubectl patch application prd-web \
 
  argocd app delete prd-web --cascade
  
+ ## project for secrets and security
+
+ Step 1: Generate .htpasswd for Basic Auth
+ # Install htpasswd if missing (Linux)
+sudo apt install apache2-utils   # Ubuntu/Debian
+# OR
+sudo yum install httpd-tools     # RHEL/CentOS
+# Create a new .htpasswd file with one user
+htpasswd -c auth htuser
+# It will prompt for a password
+
+Step 2: Create a Kubernetes Secret with the .htpasswd file
+
+kubectl create secret generic basic-auth-secret-dev \
+  --from-file=/tmp/auth \
+  -n dev-web
+
+  kubectl create secret generic basic-auth-secret-prd \
+  --from-file=/tmp/auth1 \
+  -n prd-web
+
+Step 3: Update Deployment to mount Secret
+# Edit deployment with secret
+
+spec:
+  containers:
+  - name: prd-web
+    image: simple-static-web:1.0.1
+    ports:
+    - containerPort: 80
+    volumeMounts:
+    - name: auth
+      mountPath: /etc/nginx/auth
+      readOnly: true
+  volumes:
+  - name: auth
+    secret:
+      secretName: basic-auth-secret
+
+
+Step 4: Configure NGINX to use the Secret
+
+nginx.conf
+
+kubectl create configmap dev-nginx-config \
+  --from-file=nginx.conf=nginx.conf \
+  -n dev-web \
+  --dry-run=client -o yaml > dev-nginx-config.yaml
+
+kubectl create configmap prd-nginx-config \
+  --from-file=nginx.conf=nginx.conf \
+  -n prd-web \
+  --dry-run=client -o yaml > prd-nginx-config.yaml
