@@ -300,3 +300,5 @@ kubectl create configmap prd-nginx-config \
 
 kubectl exec -it dev-web-79f695bf66-xc8br -n dev-web -- nginx -s reload
 kubectl exec -it dev-web-79f695bf66-xc8br -n dev-web -- nginx -t
+kubectl exec -it dev-web-79f695bf66-xc8br -n dev-web -- cat /etc/nginx/conf.d/default.conf
+kubectl exec -it dev-web-79f695bf66-xc8br -n dev-web -- cat /etc/nginx/nginx.conf ## if nginx.conf seperately we are using on that time only ##
