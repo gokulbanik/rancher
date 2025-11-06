@@ -1,22 +1,19 @@
-// app.js
 const express = require("express");
 const bodyParser = require("body-parser");
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Credentials from environment variables
 const USERNAME = process.env.APP_USERNAME || "admin";
 const PASSWORD = process.env.APP_PASSWORD || "secret";
 
-// Simple HTML login form
 const HTML_FORM = `
 <!DOCTYPE html>
 <html>
 <head><title>Login</title></head>
 <body>
   <h2>Login Page</h2>
-  <form method="post" action="/login">
+  <form method="post" action="/node/login">
     Username: <input type="text" name="username"><br><br>
     Password: <input type="password" name="password"><br><br>
     <input type="submit" value="Login">
@@ -25,15 +22,15 @@ const HTML_FORM = `
 </html>
 `;
 
-app.get("/", (req, res) => {
-  res.send("<h2>Node.js Login Home</h2>");
+app.get("/node", (req, res) => {
+  res.redirect("/node/login");
 });
 
-app.get("/login", (req, res) => {
+app.get("/node/login", (req, res) => {
   res.send(HTML_FORM);
 });
 
-app.post("/login", (req, res) => {
+app.post("/node/login", (req, res) => {
   const { username, password } = req.body;
   if (username === USERNAME && password === PASSWORD) {
     return res.send(`<h2>Welcome, ${username}!</h2>`);
@@ -42,6 +39,4 @@ app.post("/login", (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
