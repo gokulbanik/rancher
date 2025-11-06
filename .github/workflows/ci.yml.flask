@@ -16,7 +16,7 @@ on:
       - main
 
 env:
-  IMAGE_NAME: nodejs-app
+  IMAGE_NAME: flask-login-app
 #  IMAGE_TAG: 1.0.${{ github.run_number }}
   REGISTRY: 10.10.10.116:8083
   ARGOCD_SERVER: "192.168.0.43:8443"
@@ -53,7 +53,7 @@ jobs:
    
       - name: Build Docker Image
         run: |
-          docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} ./nodejs-app
+          docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} ./flask-login-app
 
       - name: Push Docker Image to Nexus
         run: |
@@ -100,8 +100,8 @@ jobs:
       - name: Sync ArgoCD App
         run: |
           if [ "${GITHUB_REF_NAME}" == "dev" ]; then
-            NAMESPACE="node-web"
-            APP_NAME="node-login"
+            NAMESPACE="dev-web"
+            APP_NAME="dev-web"
           elif [ "${GITHUB_REF_NAME}" == "staging" ]; then
             NAMESPACE="stg-web"
             APP_NAME="stg-web"
