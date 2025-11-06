@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: flask-login
-        image: flask-login-app:1.0.1 # (your built image; push to registry if needed)
+        image: flask-login-app:1.0.2 # (your built image; push to registry if needed)
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 5000
