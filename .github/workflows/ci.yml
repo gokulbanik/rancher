@@ -100,8 +100,8 @@ jobs:
       - name: Sync ArgoCD App
         run: |
           if [ "${GITHUB_REF_NAME}" == "dev" ]; then
-            NAMESPACE="node-web"
-            APP_NAME="node-login"
+            NAMESPACE="dev-web"
+            APP_NAME="dev-web"
           elif [ "${GITHUB_REF_NAME}" == "staging" ]; then
             NAMESPACE="stg-web"
             APP_NAME="stg-web"
@@ -143,6 +143,8 @@ jobs:
 
           cd rancher/charts/${GITHUB_REF_NAME}
           argocd app sync $APP_NAME --grpc-web --insecure
+
+
   
 #    steps:
 #      - name: Slack Notification
