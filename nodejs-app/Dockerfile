@@ -1,4 +1,4 @@
-FROM node:20-bullseye
+FROM node:stable-alpine
 
 WORKDIR /app
 COPY package*.json ./
