@@ -1,14 +1,8 @@
-FROM node:20-alpine
+FROM node:20-bullseye
 
 WORKDIR /app
-
-# Install build tools if needed
-RUN apk update && apk upgrade
-RUN apk add --no-cache python3 make g++
-
 COPY package*.json ./
 RUN npm install
-
 COPY . .
 
 EXPOSE 3000
