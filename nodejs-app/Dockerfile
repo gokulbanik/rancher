@@ -4,7 +4,6 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-# RUN npm run build  # optional if you have a build step
 
 # Stage 2: Runtime
 FROM node-alpine-hardened:20.9.0 AS runtime
