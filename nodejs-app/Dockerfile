@@ -6,7 +6,7 @@ RUN npm install
 COPY . .
 
 # Stage 2: Runtime
-FROM node-alpine-hardened:20.9.0 AS runtime
+FROM node:20-alpine AS runtime
 WORKDIR /app
 COPY --from=build /app ./
 EXPOSE 3000
