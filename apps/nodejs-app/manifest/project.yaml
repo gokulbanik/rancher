@@ -5,7 +5,7 @@ metadata:
   name: nodejs-project
   namespace: argocd
 spec:
-  description: Flask applications
+  description: Nodejs applications
   sourceRepos:
     - 'https://github.com/gokulbanik/rancher.git'
   destinations:
