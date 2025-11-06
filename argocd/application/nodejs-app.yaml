@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: node-web
+  namespace: argocd
+spec:
+  project: nodejs-project
+  source:
+    repoURL: 'https://github.com/gokulbanik/rancher.git'   # <-- replace with your real repo URL
+    targetRevision: dev
+    path: apps/flask-login-app/manifest
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: flask-web
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

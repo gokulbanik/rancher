@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-login-deploy
+  namespace: node-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: node-login
+  template:
+    metadata:
+      labels:
+        app: node-login
+    spec:
+      containers:
+        - name: node-login
+          image: <your-image>:latest
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - secretRef:
+                name: node-login-secret
