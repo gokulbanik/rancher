@@ -3,6 +3,7 @@ FROM node:20-alpine
 WORKDIR /app
 
 # Install build tools if needed
+RUN apk update && apk upgrade
 RUN apk add --no-cache python3 make g++
 
 COPY package*.json ./
