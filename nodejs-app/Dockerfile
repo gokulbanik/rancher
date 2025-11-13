@@ -1,10 +1,13 @@
-FROM node:20-alpine AS build
+# Stage 1: Build
+FROM node:20-bullseye AS build
+
+# Set working directory
 WORKDIR /app
 
-# Copy package files
+# Copy package.json and package-lock.json (if any)
 COPY package*.json ./
 
-# Install exact patched versions directly
+# Clean install with exact versions
 RUN npm install \
     body-parser@1.20.3 \
     brace-expansion@2.0.2 \
@@ -14,13 +17,17 @@ RUN npm install \
     send@0.19.0 \
     serve-static@1.16.0
 
-# Copy the rest of your app
+# Copy application code
 COPY . .
 
-# Runtime image
-FROM node:20-alpine AS runtime
+# Stage 2: Runtime
+FROM node:20-bullseye AS runtime
+
 WORKDIR /app
-COPY --from=build /app ./
+
+# Copy built node_modules and app
+COPY --from=build /app /app
 
 EXPOSE 3000
+
 CMD ["node", "app.js"]
