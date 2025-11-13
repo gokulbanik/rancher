@@ -2,21 +2,24 @@
 FROM node:20-alpine AS build
 WORKDIR /app
 
-# Copy only package files first to leverage caching
+# Copy package files first (for caching)
 COPY package*.json ./
 
-# Update cross-spawn before installing (or just ensure fixed version in package.json)
-RUN npm install cross-spawn@7.0.5 --save && npm install
+# Install exact versions from package-lock.json (or generate fresh)
+RUN npm ci
 
-# Copy application code
+# Copy the rest of the app
 COPY . .
 
 # Stage 2: Runtime
 FROM node:20-alpine AS runtime
 WORKDIR /app
 
-# Copy built node_modules and source
+# Copy built app and node_modules from build stage
 COPY --from=build /app ./
 
+# Expose port
 EXPOSE 3000
+
+# Run the app
 CMD ["node", "app.js"]
