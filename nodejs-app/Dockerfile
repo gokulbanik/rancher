@@ -1,25 +1,20 @@
-# Use Oracle Linux 9
 FROM oraclelinux:9
 
-# Install dependencies
-RUN dnf -y install oracle-epel-release \
-    && dnf -y module enable nodejs:20 \
+# Enable Node.js 20 module and install dependencies
+RUN dnf -y module enable nodejs:20 \
     && dnf -y install nodejs npm git tar gzip \
     && dnf clean all
 
-# Set workdir
 WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
 
-# Remove lock & node_modules in case they exist
-RUN rm -rf node_modules package-lock.json
+# Remove existing lock and node_modules (fresh install)
+RUN rm -rf node_modules package-lock.json \
+    && npm install --verbose
 
-# Install npm dependencies
-RUN npm install --verbose
-
-# Copy application code
+# Copy the rest of the app
 COPY . .
 
 EXPOSE 3000
