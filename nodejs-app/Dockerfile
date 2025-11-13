@@ -17,6 +17,7 @@ RUN npm install \
     send@0.19.0 \
     serve-static@1.16.0
 
+RUN apt update -y
 # Copy application code
 COPY . .
 
