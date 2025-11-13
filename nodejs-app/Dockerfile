@@ -2,26 +2,21 @@
 FROM node:20-alpine AS build
 WORKDIR /app
 
-# Copy package files first (for caching)
+# Copy package files
 COPY package*.json ./
 
-# Install exact versions from package-lock.json (or generate fresh)
-RUN rm -rf node_modules package-lock.json
-RUN npm install
-RUN npm ci
+# Install exact fixed versions directly in Docker
+RUN npm install cross-spawn@7.0.5 brace-expansion@2.0.2 express@4.18.2 body-parser@1.20.2 --save
 
-# Copy the rest of the app
+# Copy app code
 COPY . .
 
 # Stage 2: Runtime
 FROM node:20-alpine AS runtime
 WORKDIR /app
 
-# Copy built app and node_modules from build stage
+# Copy built app
 COPY --from=build /app ./
 
-# Expose port
 EXPOSE 3000
-
-# Run the app
 CMD ["node", "app.js"]
