@@ -1,21 +1,20 @@
-FROM oraclelinux:9
+# Use Node.js 22 on Alpine
+FROM node:22-alpine
 
-# Enable Node.js 20 module and install dependencies
-RUN dnf -y module enable nodejs:20 \
-    && dnf -y install nodejs npm git tar gzip \
-    && dnf clean all
+# Set working directory
+WORKDIR /usr/src/app
 
-WORKDIR /app
-
-# Copy package files
+# Copy package.json and package-lock.json
 COPY package*.json ./
 
-# Remove existing lock and node_modules (fresh install)
-RUN rm -rf node_modules package-lock.json \
-    && npm install --verbose
+# Install dependencies
+RUN npm install --production
 
-# Copy the rest of the app
+# Copy app source code
 COPY . .
 
+# Expose the port your app uses
 EXPOSE 3000
-CMD ["node", "app.js"]
+
+# Start the app
+CMD ["node", "index.js"]
