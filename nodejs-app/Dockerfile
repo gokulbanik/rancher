@@ -6,6 +6,8 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install exact versions from package-lock.json (or generate fresh)
+RUN rm -rf node_modules package-lock.json
+RUN npm install
 RUN npm ci
 
 # Copy the rest of the app
